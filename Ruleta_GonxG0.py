@@ -10,7 +10,7 @@ import random
 
 import functools
 
-def monto(dato):
+def monto(dato): # Sube o baja la intencion de la apuesta segun el boton seleccionado
 	
 	global apuesta
 	
@@ -21,9 +21,8 @@ def monto(dato):
 def salir():
 	
 	exit()
-
 	
-def actualizar():
+def actualizar(): #Se encarga de actualizar el numero de la apuesta, asegurandose de no poner apuestas negativas o sobrepasar el saldo actual
 	
 	global apuesta
 	if apuesta < 0:
@@ -36,7 +35,7 @@ def actualizar():
 	
 	tks["labels"]["apuesta"].config(text=f"{apuesta}")
 	
-def ingreso():
+def ingreso(): # Segun la cantidad de intencion de la apuesta y la jugada seleccionada, consume el saldo y carga la jugada a la lista, si ya esta la jugada suma a la misma
 	
 	global saldo, apuesta
 	
@@ -60,7 +59,7 @@ def ingreso():
 		
 		opcion.set("")
 		
-def dibujo():
+def dibujo(): #Dibuja todas las jugadas a la izquierda de la ventana
 		
 	global borrame, jugadas
 	print(borrame)
@@ -84,13 +83,13 @@ def dibujo():
 		tks["labels apuesta"][k] = tk.Label(text= f"{jugadas[k]} a {k}",bg = "antiquewhite2" ,activebackground= "antiquewhite2")
 		tks["labels apuesta"][k].place(x = des, y = (des+grosor)*(3+n)+des, width=(des+grosor)*3,height= grosor)
 		
-def lanzar():
+def lanzar(): #Por cada jugada que realizo se verifica si es validad, de serlo se añade el saldo segun la apuesta, a su vez se pintan las jugadas para entender la resolucion
 	
 	global saldo, borrame, jugadas
 	
-	numero = random.randint(0,36)
+	numero = random.randint(0,36) # Gira la ruleta
 	print(numero)
-	for j,v in jugadas.items():
+	for j,v in jugadas.items(): # Recorre todas las jugadas
 	
 		gano = False
 		
@@ -162,19 +161,24 @@ def lanzar():
 			
 			tks["labels apuesta"][j].config(bg = "red4")
 			
-	borrame = True
+	borrame = True 
+
+	#Se prepara todo para la siguiente ronda
+
 	jugadas = {}
 	actualizar()
 	tks["labels"]["saldo"].config(text=str(saldo))
 	tks["labels"]["lanzar"].config(text=str(numero),font=("Courier", 24))
 
-ancho = 725
+# Se preparan los parametros geometricos para todo el sistema
 
-alto = 940
+ancho = 725 #Ancho de ventana
 
-des = 5
+alto = 940 #Alto de ventana
 
-grosor = 50
+des = 5 #Desfase entre botones
+
+grosor = 50 #Grosor de botones
 
 xx = ancho/2-((grosor+des)*3-des)/2+des-4
 
@@ -201,17 +205,15 @@ multiplicadores = 	{
 jugadas = {}
 veredicto = {}
 
+#Creacion de botones mediante for y geometria para reducir codigo
+
 calles = []
-for n in range(12):
+for n in range(12): 
 	
 	calles.append("TRASVERSAL "+str(n))
 
 monedas = [1,5,10,25,50,100,500,1000]
 colores = ("gray","red4","dodger blue3","green","orange red4","black","purple","yellow3")
-# ~ funciones = (
-			# ~ (mas1,mas5,mas10,mas25,mas50,mas100,mas500,mas1000),
-			# ~ (men1,men5,men10,men25,men50,men100,men500,men1000)
-			# ~ )
 			
 borrame = False
 apuesta = 0
@@ -225,6 +227,9 @@ ventana.geometry(f"{ancho}x{alto}")
 
 opcion = tk.StringVar()
 opcion.set("")
+
+
+#Creacion de botones mediante for y geometria para reducir codigo
 
 for a in range(36): # Numeros del 1 al 36
 	
@@ -304,21 +309,17 @@ for u in range(2): #("FALTA","PASA")
 #################################################################################################
 #################################################################################################
 
-
+# Botones de apuestas
 
 for c,n in enumerate(monedas): # Suma de apuestas
 
 	tks["botones"]["+"+str(n)] = tk.Button(text="+"+str(n),command = functools.partial(monto,f"+{n}"))
-
-	# ~ tks["botones"]["+"+str(n)] = tk.Button(text="+"+str(n),command = funciones[0][c])  
 	tks["botones"]["+"+str(n)].config(bg = colores[c], fg = "white", activebackground = colores[c],activeforeground = "white")
 	tks["botones"]["+"+str(n)].place(x=des+ c*(des+grosor),y=des, width=grosor, height= grosor)
 	
 for c,n in enumerate(monedas):  # Resta de apuestas
 
 	tks["botones"]["-"+str(n)] = tk.Button(text="-"+str(n),command = functools.partial(monto,f"-{n}"))
-
-	# ~ tks["botones"]["-"+str(n)] = tk.Button(text="-"+str(n),command = funciones[1][c])
 	tks["botones"]["-"+str(n)].config(bg = colores[c], fg = "white", activebackground = colores[c],activeforeground = "white")
 	tks["botones"]["-"+str(n)].place(x=des+ c*(des+grosor),y=des*2+grosor, width=grosor, height= grosor)
 	
